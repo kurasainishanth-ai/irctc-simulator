@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRCTC Simulator - Book Ticket</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>IRCTC Next Generation eTicketing System (Simulator)</h1>
+        <div class="user-info">
+            Welcome, {{ session['username'] }} <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <div class="card-header">PLAN MY JOURNEY</div>
+            <div class="card-body">
+                <form method="POST" id="searchForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="from_station">From Station</label>
+                            <input type="text" name="from_station" id="from_station" placeholder="e.g. HYDERABAD" value="HYDERABAD" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="to_station">To Station</label>
+                            <input type="text" name="to_station" id="to_station" placeholder="e.g. NEW DELHI" value="NEW DELHI" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Journey Date</label>
+                            <input type="date" name="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="class_pref">Preferred Class</label>
+                            <select name="class_pref" id="class_pref">
+                                <option value="All Classes">All Classes</option>
+                                <option value="1A">AC First Class (1A)</option>
+                                <option value="2A">AC 2 Tier (2A)</option>
+                                <option value="3A">AC 3 Tier (3A)</option>
+                                <option value="SL">Sleeper (SL)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="searchBtn">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

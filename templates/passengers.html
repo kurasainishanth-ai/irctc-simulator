@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRCTC Simulator - Passenger Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>IRCTC Next Generation eTicketing System (Simulator)</h1>
+        <div class="user-info">
+            Welcome, {{ session['username'] }} <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <div class="card-header">JOURNEY DETAILS</div>
+            <div class="card-body">
+                <table class="review-table">
+                    <tr><td>Train</td><td>{{ train.train_name }} ({{ train.train_number }})</td></tr>
+                    <tr><td>From &rarr; To</td><td>{{ train.from_station }} &rarr; {{ train.to_station }}</td></tr>
+                    <tr><td>Departure</td><td>{{ train.departure }}</td></tr>
+                    <tr><td>Arrival</td><td>{{ train.arrival }}</td></tr>
+                    <tr><td>Class</td><td>{{ train.class }}</td></tr>
+                    <tr><td>Availability</td><td>{{ train.availability }}</td></tr>
+                    <tr><td>Base Fare (per passenger)</td><td>₹ {{ train.fare }}</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <form method="POST" id="passengerForm">
+            <div class="card">
+                <div class="card-header">PASSENGER DETAILS</div>
+                <div class="card-body">
+                    <table class="passenger-table" id="passengerTable">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">#</th>
+                                <th style="width:25%">Name</th>
+                                <th style="width:10%">Age</th>
+                                <th style="width:15%">Gender</th>
+                                <th style="width:15%">Nationality</th>
+                                <th style="width:20%">Berth Preference</th>
+                                <th style="width:10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="passengerRows">
+                            <tr class="passenger-row" data-index="1">
+                                <td>1</td>
+                                <td><input type="text" name="name[]" placeholder="Passenger Name" required></td>
+                                <td><input type="number" name="age[]" placeholder="Age" min="1" max="120" required></td>
+                                <td>
+                                    <select name="gender[]" required>
+                                        <option value="">Select</option>
+                                        <option value="M">Male</option>
+                                        <option value="F">Female</option>
+                                        <option value="T">Transgender</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="nationality[]">
+                                        <option value="IN">Indian</option>
+                                        <option value="OTHER">Foreign</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="berth_pref[]">
+                                        <option value="">No Preference</option>
+                                        <option value="LB">Lower Berth</option>
+                                        <option value="MB">Middle Berth</option>
+                                        <option value="UB">Upper Berth</option>
+                                        <option value="SL">Side Lower</option>
+                                        <option value="SU">Side Upper</option>
+                                    </select>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <button type="button" class="btn btn-secondary" id="addPassengerBtn" onclick="addPassenger()">+ Add Passenger</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">CONTACT DETAILS</div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mobile">Mobile Number</label>
+                            <input type="tel" name="mobile" id="mobile" placeholder="10-digit mobile" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email ID</label>
+                            <input type="email" name="email" id="email" placeholder="your@email.com">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="continueBtn">Continue Booking</button>
+        </form>
+    </div>
+
+    <script>
+        let psgCount = 1;
+        function addPassenger() {
+            psgCount++;
+            const tbody = document.getElementById('passengerRows');
+            const row = document.createElement('tr');
+            row.className = 'passenger-row';
+            row.setAttribute('data-index', psgCount);
+            row.innerHTML = `
+                <td>${psgCount}</td>
+                <td><input type="text" name="name[]" placeholder="Passenger Name" required></td>
+                <td><input type="number" name="age[]" placeholder="Age" min="1" max="120" required></td>
+                <td>
+                    <select name="gender[]" required>
+                        <option value="">Select</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="T">Transgender</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="nationality[]">
+                        <option value="IN">Indian</option>
+                        <option value="OTHER">Foreign</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="berth_pref[]">
+                        <option value="">No Preference</option>
+                        <option value="LB">Lower Berth</option>
+                        <option value="MB">Middle Berth</option>
+                        <option value="UB">Upper Berth</option>
+                        <option value="SL">Side Lower</option>
+                        <option value="SU">Side Upper</option>
+                    </select>
+                </td>
+                <td><button type="button" class="btn btn-danger" onclick="removePassenger(this)" style="padding:4px 10px;font-size:12px;">X</button></td>
+            `;
+            tbody.appendChild(row);
+        }
+        function removePassenger(btn) {
+            const row = btn.closest('tr');
+            row.remove();
+            // Re-number rows
+            const rows = document.querySelectorAll('#passengerRows tr');
+            rows.forEach((r, i) => {
+                r.querySelector('td').textContent = i + 1;
+                r.setAttribute('data-index', i + 1);
+            });
+            psgCount = rows.length;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRCTC Simulator - Booking Confirmed</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>IRCTC Next Generation eTicketing System (Simulator)</h1>
+        <div class="user-info">
+            Welcome, {{ session['username'] }} <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="success-banner">
+            <h2>🎉 Booking Confirmed!</h2>
+            <p>Your ticket has been booked successfully.</p>
+            <div class="pnr" id="pnr_value">PNR: {{ pnr }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">JOURNEY DETAILS</div>
+            <div class="card-body">
+                <table class="review-table">
+                    <tr><td>Train</td><td>{{ train.train_name }} ({{ train.train_number }})</td></tr>
+                    <tr><td>From</td><td>{{ train.from_station }} — Dep: {{ train.departure }}</td></tr>
+                    <tr><td>To</td><td>{{ train.to_station }} — Arr: {{ train.arrival }}</td></tr>
+                    <tr><td>Class</td><td>{{ train.class }}</td></tr>
+                    <tr><td>Total Fare</td><td>₹ {{ total_fare }}</td></tr>
+                    <tr><td>Booking Status</td><td style="color:green;font-weight:bold;">CNF / CONFIRMED</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">PASSENGER DETAILS</div>
+            <div class="card-body">
+                <table class="passenger-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                            <th>Coach / Berth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in passengers %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ p.name }}</td>
+                            <td>{{ p.age }}</td>
+                            <td>{{ p.gender }}</td>
+                            <td style="color:green;font-weight:bold;">CNF</td>
+                            <td>S{{ loop.index + 2 }} / {{ loop.index * 12 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <a href="{{ url_for('search') }}" class="btn btn-primary">Book Another Ticket</a>
+    </div>
+</body>
+</html>

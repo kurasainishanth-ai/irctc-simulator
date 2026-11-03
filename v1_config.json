@@ -1,0 +1,17 @@
+{
+    "train": "12759",
+    "train_name": "CHARMINAR EXP",
+    "class": "3A",
+    "passengers": [
+        {
+            "name": "Passenger 1",
+            "age": 18,
+            "gender": "M"
+        }
+    ],
+    "contact": {
+        "mobile": "9876543210"
+    },
+    "travel_insurance": false,
+    "payment_preference": "credit"
+}

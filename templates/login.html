@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRCTC Simulator - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>IRCTC Next Generation eTicketing System (Simulator)</h1>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">LOGIN</div>
+            <div class="card-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash-error">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST" id="loginForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="username">User Name</label>
+                            <input type="text" name="username" id="username" placeholder="User Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="loginBtn">SIGN IN</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

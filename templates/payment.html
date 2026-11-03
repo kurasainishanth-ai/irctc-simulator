@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRCTC Simulator - Payment Options</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>IRCTC Next Generation eTicketing System (Simulator)</h1>
+        <div class="user-info">
+            Welcome, {{ session['username'] }} <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <div class="card-header">SELECT PAYMENT METHOD — Total: ₹ {{ total_fare }}</div>
+            <div class="card-body">
+                <form method="POST" id="paymentForm">
+                    <div class="payment-option">
+                        <input type="radio" name="gateway" id="gw_ipay" value="ipay" disabled>
+                        <label for="gw_ipay">IRCTC iPay — Powered by IRCTC</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="gateway" id="gw_ewallet" value="ewallet" required>
+                        <label for="gw_ewallet">E-Wallet</label>
+                        <span class="tag">Simulator Default</span>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="gateway" id="gw_mps" value="mps" disabled>
+                        <label for="gw_mps">Multiple Payment Service</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="gateway" id="gw_netbanking" value="netbanking" disabled>
+                        <label for="gw_netbanking">Net Banking</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="gateway" id="gw_card" value="card" disabled>
+                        <label for="gw_card">Payment Gateway / Credit & Debit Cards</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="gateway" id="gw_wallet" value="wallet" disabled>
+                        <label for="gw_wallet">Wallets / Cash Card</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="gateway" id="gw_emi" value="emi" disabled>
+                        <label for="gw_emi">EMI</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="gateway" id="gw_loyalty" value="loyalty" disabled>
+                        <label for="gw_loyalty">Loyalty Redemption Booking</label>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" id="payProceedBtn">Pay & Book</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

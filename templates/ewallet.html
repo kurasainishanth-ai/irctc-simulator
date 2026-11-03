@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRCTC Simulator - eWallet Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>IRCTC Next Generation eTicketing System (Simulator)</h1>
+        <div class="user-info">
+            Welcome, {{ session['username'] }} <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <div class="card-header">IRCTC E-WALLET PAYMENT</div>
+            <div class="card-body">
+                <div class="wallet-info">
+                    <div class="item">
+                        <div class="label">Wallet Balance</div>
+                        <div class="value balance" id="walletBalance">₹ {{ balance }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Amount to Debit</div>
+                        <div class="value debit" id="amountToDebit">₹ {{ total_fare }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Remaining After Payment</div>
+                        <div class="value" id="remainingBalance">₹ {{ balance - total_fare }}</div>
+                    </div>
+                </div>
+
+                <form method="POST" id="ewalletForm">
+                    <button type="submit" class="btn btn-success" id="payBookBtn" style="width:100%;padding:12px;font-size:16px;">Pay ₹ {{ total_fare }} & Book Ticket</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

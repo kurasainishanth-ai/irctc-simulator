@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRCTC Simulator - Train List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>IRCTC Next Generation eTicketing System (Simulator)</h1>
+        <div class="user-info">
+            Welcome, {{ session['username'] }} <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <div class="card-header">TRAIN LIST &mdash; {{ criteria['from_station'] }} to {{ criteria['to_station'] }} | {{ criteria['date'] }}</div>
+            <div class="card-body">
+                {% if not trains %}
+                    <div class="no-results">
+                        <h3>No Trains Found</h3>
+                        <p>No direct trains available for this route. Try HYDERABAD to NEW DELHI.</p>
+                    </div>
+                {% endif %}
+
+                {% for train in trains %}
+                <div class="train-card" data-train-number="{{ train.train_number }}">
+                    <div class="train-card-header">
+                        <span class="train-id">{{ train.train_name }} ({{ train.train_number }})</span>
+                        <span class="running-days">Runs: {{ train.running_days }}</span>
+                    </div>
+
+                    <div class="train-schedule">
+                        <div class="station">
+                            <div class="time">{{ train.departure }}</div>
+                            <div class="name">{{ train.from_station }}</div>
+                        </div>
+                        <div class="duration">{{ train.duration }}</div>
+                        <div class="station">
+                            <div class="time">{{ train.arrival }}</div>
+                            <div class="name">{{ train.to_station }}</div>
+                        </div>
+                    </div>
+
+                    <form method="POST">
+                        <input type="hidden" name="train_number" value="{{ train.train_number }}">
+
+                        <div class="class-availability">
+                        {% for cls, info in train.classes.items() %}
+                            <div class="class-box {{ info.status }}" data-train-number="{{ train.train_number }}" data-class="{{ cls }}">
+                                {% if info.status != 'unavailable' %}
+                                <input type="radio" name="class_selected" id="cls_{{ train.train_number }}_{{ cls }}" value="{{ cls }}">
+                                {% endif %}
+                                <span class="cls-name">{{ cls }}</span>
+                                <div class="cls-avail">{{ info.availability }}</div>
+                                <div class="cls-fare">₹ {{ info.fare }}</div>
+                                <span class="cls-indicator"></span>
+                            </div>
+                        {% endfor %}
+                        </div>
+
+                        <div class="train-card-actions">
+                            <button type="submit" class="btn btn-primary" id="bookBtn_{{ train.train_number }}">Book Now</button>
+                        </div>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

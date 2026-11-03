@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head><title>Mock IRCTC</title></head>
+<body>
+    <app-train-avl-enq>
+        <div class="train-heading">ANDAMAN EXPRESS (16031)</div>
+        <table class="class-table">
+            <tr>
+                <td class="active">SL</td>
+            </tr>
+        </table>
+        <div class="col-xs-12">AVAILABLE-0077</div>
+        <table class="avail-table">
+            <tr><td></td><td><div>15 Oct</div></td></tr>
+        </table>
+        <button class="btn btn-primary" id="bookBtn">Book Now</button>
+    </app-train-avl-enq>
+
+    <div id="psgninput" style="display:none;">
+        <app-passenger>
+            <input placeholder="Passenger Name" class="name-input">
+            <input placeholder="Age" class="age-input">
+            <select formcontrolname="passengerGender">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select>
+        </app-passenger>
+        <input id="mobileNumber" value="">
+        <button id="continueReview">Continue</button>
+    </div>
+
+    <script>
+        document.getElementById("bookBtn").addEventListener("click", function() {
+            document.querySelector("app-train-avl-enq").style.display = "none";
+            document.getElementById("psgninput").style.display = "block";
+            history.pushState(null, "", "?psgninput=true");
+        });
+        document.getElementById("continueReview").addEventListener("click", function() {
+            history.pushState(null, "", "?reviewBooking=true");
+        });
+    </script>
+</body>
+</html>

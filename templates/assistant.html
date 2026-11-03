@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRCTC Tatkal Assistant</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --border: #dee2e6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: var(--secondary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .form-control {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .passenger-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 10px;
+            align-items: center;
+            background: var(--bg);
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+        .passenger-row.header {
+            background: none;
+            border: none;
+            font-weight: bold;
+            padding-bottom: 0;
+            margin-bottom: 5px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: 100%;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px;
+        }
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #e8f4f8;
+            border-left: 5px solid var(--secondary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-box.error {
+            background-color: #fde8e8;
+            border-left-color: var(--danger);
+            color: var(--danger);
+        }
+        .status-box.success {
+            background-color: #e8fdf0;
+            border-left-color: var(--success);
+            color: var(--success);
+        }
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: var(--secondary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        .status-box.running .spinner {
+            display: block;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .small-text {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>IRCTC Tatkal Assistant</h1>
+
+    <div class="card">
+        <h2>JOURNEY</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Train Number</label>
+                <input type="text" id="train" class="form-control" placeholder="12759">
+            </div>
+            <div class="form-group">
+                <label>Train Name</label>
+                <input type="text" id="train_name" class="form-control" placeholder="CHARMINAR EXP">
+            </div>
+            <div class="form-group">
+                <label>Class</label>
+                <select id="class" class="form-control">
+                    <option value="SL">SL</option>
+                    <option value="3A">3A</option>
+                    <option value="2A">2A</option>
+                    <option value="1A">1A</option>
+                    <option value="CC">CC</option>
+                    <option value="EC">EC</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>PASSENGERS</h2>
+        <div class="passenger-row header">
+            <div>Name</div>
+            <div>Age</div>
+            <div>Gender</div>
+        </div>
+        
+        <div id="passengers-container">
+            <!-- Rendered by JS -->
+        </div>
+        <div class="small-text">* Only Passenger 1 is required.</div>
+    </div>
+
+    <div class="card">
+        <h2>OPTIONS & CONTACT</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="text" id="mobile" class="form-control" placeholder="9876543210">
+            </div>
+            <div class="form-group">
+                <label>Travel Insurance</label>
+                <select id="insurance" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Payment Preference</label>
+                <select id="payment" class="form-control">
+                    <option value="upi">BHIM/UPI</option>
+                    <option value="credit">Credit/Debit/Net Banking</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-box" id="status-box">
+        <div class="spinner"></div>
+        <span id="status-text">Ready</span>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-primary" onclick="saveConfig()" id="save-btn">SAVE CONFIG</button>
+        <button class="btn btn-success" onclick="startBooking()" id="start-btn">START BOOKING</button>
+    </div>
+</div>
+
+<script>
+    // Initialize 6 empty passengers
+    const passengersContainer = document.getElementById('passengers-container');
+    for (let i = 0; i < 6; i++) {
+        passengersContainer.innerHTML += `
+            <div class="passenger-row">
+                <input type="text" class="form-control p-name" placeholder="Passenger ${i+1} Name">
+                <input type="number" class="form-control p-age" placeholder="Age">
+                <select class="form-control p-gender">
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="T">Transgender</option>
+                </select>
+            </div>
+        `;
+    }
+
+    // Load existing config
+    fetch('/api/config')
+        .then(res => res.json())
+        .then(data => {
+            if (!data.train) return;
+            document.getElementById('train').value = data.train || '';
+            document.getElementById('train_name').value = data.train_name || '';
+            document.getElementById('class').value = data.class || 'SL';
+            document.getElementById('mobile').value = (data.contact && data.contact.mobile) || '';
+            document.getElementById('insurance').value = data.travel_insurance === false ? 'false' : 'true';
+            document.getElementById('payment').value = data.payment_preference || 'upi';
+
+            const names = document.querySelectorAll('.p-name');
+            const ages = document.querySelectorAll('.p-age');
+            const genders = document.querySelectorAll('.p-gender');
+            
+            if (data.passengers) {
+                data.passengers.forEach((p, i) => {
+                    if (i < 6) {
+                        names[i].value = p.name || '';
+                        ages[i].value = p.age || '';
+                        genders[i].value = p.gender || 'M';
+                    }
+                });
+            }
+        });
+
+    function getConfigObj() {
+        const passengers = [];
+        const names = document.querySelectorAll('.p-name');
+        const ages = document.querySelectorAll('.p-age');
+        const genders = document.querySelectorAll('.p-gender');
+
+        for (let i = 0; i < 6; i++) {
+            const n = names[i].value.trim();
+            const a = ages[i].value.trim();
+            const g = genders[i].value;
+            if (n && a) {
+                passengers.push({ name: n, age: parseInt(a, 10), gender: g });
+            }
+        }
+
+        return {
+            train: document.getElementById('train').value.trim(),
+            train_name: document.getElementById('train_name').value.trim(),
+            class: document.getElementById('class').value,
+            passengers: passengers,
+            contact: { mobile: document.getElementById('mobile').value.trim() },
+            travel_insurance: document.getElementById('insurance').value === 'true',
+            payment_preference: document.getElementById('payment').value
+        };
+    }
+
+    async function saveConfig() {
+        const config = getConfigObj();
+        if (!config.train || !config.class || !config.contact.mobile || config.passengers.length === 0) {
+            alert('Please fill at least Train, Class, Mobile, and Passenger 1.');
+            return false;
+        }
+
+        const btn = document.getElementById('save-btn');
+        btn.innerText = 'SAVING...';
+        
+        await fetch('/api/config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(config)
+        });
+        
+        setTimeout(() => btn.innerText = 'SAVE CONFIG', 1000);
+        return true;
+    }
+
+    let isStarting = false;
+
+    async function startBooking() {
+        if (isStarting) return;
+        const startBtn = document.getElementById('start-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const statusBox = document.getElementById('status-box');
+
+        if (!await saveConfig()) return;
+
+        isStarting = true;
+        startBtn.disabled = true;
+        saveBtn.disabled = true;
+        statusBox.classList.add('running');
+        statusBox.classList.remove('error', 'success');
+
+        try {
+            const res = await fetch('/api/start', { method: 'POST' });
+            const data = await res.json();
+            if (data.status === 'error') {
+                statusBox.classList.remove('running');
+                statusBox.classList.add('error');
+                document.getElementById('status-text').innerText = data.message;
+                startBtn.disabled = false;
+                saveBtn.disabled = false;
+                isStarting = false;
+                return;
+            }
+        } catch (e) {
+            statusBox.classList.remove('running');
+            statusBox.classList.add('error');
+            document.getElementById('status-text').innerText = 'Failed to connect to backend.';
+            startBtn.disabled = false;
+            saveBtn.disabled = false;
+            isStarting = false;
+            return;
+        }
+
+        pollStatus();
+    }
+
+    function pollStatus() {
+        fetch('/api/status')
+            .then(res => res.json())
+            .then(data => {
+                const statusText = document.getElementById('status-text');
+                const statusBox = document.getElementById('status-box');
+                const startBtn = document.getElementById('start-btn');
+                const saveBtn = document.getElementById('save-btn');
+
+                statusText.innerText = data.message;
+                
+                // Apply correct visual state
+                statusBox.classList.remove('error', 'success');
+                if (data.is_error) {
+                    statusBox.classList.add('error');
+                } else if (!data.running && data.stage === 'done') {
+                    statusBox.classList.add('success');
+                }
+
+                if (!data.running) {
+                    // Terminal state — stop spinner and re-enable buttons
+                    statusBox.classList.remove('running');
+                    startBtn.disabled = false;
+                    saveBtn.disabled = false;
+                    isStarting = false;
+                    // Do NOT continue polling after terminal state
+                } else {
+                    setTimeout(pollStatus, 1000);
+                }
+            })
+            .catch(() => {
+                // Backend temporarily unreachable — keep polling
+                setTimeout(pollStatus, 2000);
+            });
+    }
+
+    // Initial poll in case it's already running
+    pollStatus();
+</script>
+
+</body>
+</html>

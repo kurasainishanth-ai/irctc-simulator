@@ -1,0 +1,320 @@
+/* IRCTC Simulator - Realistic Styling */
+:root {
+    --irctc-blue: #213d77;
+    --irctc-orange: #fb792b;
+    --irctc-light-bg: #f0f4f8;
+    --irctc-header-bg: #213d77;
+    --border-color: #ddd;
+    --success-green: #28a745;
+    --danger-red: #dc3545;
+    --warning-orange: #ff9800;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--irctc-light-bg);
+    color: #333;
+    line-height: 1.5;
+}
+/* Header */
+.header {
+    background: var(--irctc-header-bg);
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header h1 { font-size: 18px; font-weight: 600; }
+.header .user-info { font-size: 13px; }
+.header a { color: #ffcc00; text-decoration: none; margin-left: 15px; }
+/* Container */
+.container {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+.card {
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.card-header {
+    background: var(--irctc-blue);
+    color: white;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.card-body { padding: 15px; }
+/* Flash messages */
+.flash-error {
+    background-color: #fef0f0;
+    color: var(--danger-red);
+    padding: 10px 15px;
+    margin: 10px 15px;
+    border-left: 4px solid var(--danger-red);
+    border-radius: 3px;
+    font-size: 13px;
+}
+/* Forms */
+.form-group { margin-bottom: 14px; }
+.form-group label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+}
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.form-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.form-row .form-group { flex: 1; min-width: 120px; }
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+.btn-primary { background: var(--irctc-orange); color: white; }
+.btn-primary:hover { background: #e06c25; }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #5a6268; }
+.btn-success { background: var(--success-green); color: white; }
+.btn-danger { background: var(--danger-red); color: white; }
+/* Train Cards */
+.train-card {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+.train-card-header {
+    background: #f7f9fc;
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.train-card-header .train-id {
+    font-weight: 700;
+    color: var(--irctc-blue);
+    font-size: 15px;
+}
+.train-card-header .running-days {
+    font-size: 11px;
+    color: #888;
+}
+.train-schedule {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+.train-schedule .station {
+    text-align: center;
+}
+.train-schedule .station .time {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+.train-schedule .station .name {
+    font-size: 12px;
+    color: #777;
+    margin-top: 2px;
+}
+.train-schedule .duration {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 4px 10px;
+}
+.class-availability {
+    display: flex;
+    gap: 0;
+    border-top: 1px solid var(--border-color);
+}
+.class-box {
+    flex: 1;
+    text-align: center;
+    padding: 10px 8px;
+    border-right: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+}
+.class-box:last-child { border-right: none; }
+.class-box:hover { background: #f0f4ff; }
+.class-box .cls-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--irctc-blue);
+}
+.class-box .cls-avail {
+    font-size: 11px;
+    margin-top: 3px;
+}
+.class-box .cls-fare {
+    font-size: 12px;
+    color: #555;
+    margin-top: 2px;
+}
+.class-box.available .cls-avail { color: var(--success-green); }
+.class-box.waitlist .cls-avail { color: var(--warning-orange); }
+.class-box.unavailable .cls-avail { color: var(--danger-red); }
+.class-box.unavailable { opacity: 0.5; cursor: not-allowed; }
+.class-box input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    margin: 0;
+}
+.class-box input[type="radio"]:checked ~ .cls-name {
+    color: var(--irctc-orange);
+}
+.class-box input[type="radio"]:checked ~ .cls-indicator {
+    display: block;
+}
+.cls-indicator {
+    display: none;
+    width: 100%;
+    height: 3px;
+    background: var(--irctc-orange);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.train-card-actions {
+    padding: 10px 15px;
+    text-align: right;
+    border-top: 1px solid var(--border-color);
+}
+/* Passenger table */
+.passenger-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.passenger-table th, .passenger-table td {
+    padding: 8px 10px;
+    border: 1px solid #eee;
+    font-size: 13px;
+}
+.passenger-table th {
+    background: #f7f9fc;
+    font-weight: 600;
+    text-align: left;
+    color: var(--irctc-blue);
+}
+.passenger-table input,
+.passenger-table select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 13px;
+}
+/* Review table */
+.review-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+.review-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+}
+.review-table td:first-child {
+    font-weight: 600;
+    color: #555;
+    width: 200px;
+}
+/* Payment */
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+.payment-option:hover { border-color: var(--irctc-blue); }
+.payment-option input[type="radio"] { margin-right: 12px; }
+.payment-option label { cursor: pointer; font-size: 14px; flex: 1; }
+.payment-option .tag {
+    font-size: 11px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+/* eWallet */
+.wallet-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background: #f7f9fc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+.wallet-info .item { text-align: center; }
+.wallet-info .item .label { font-size: 12px; color: #777; }
+.wallet-info .item .value { font-size: 20px; font-weight: 700; }
+.wallet-info .item .value.balance { color: var(--success-green); }
+.wallet-info .item .value.debit { color: var(--danger-red); }
+/* Success */
+.success-banner {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+.success-banner h2 { font-size: 22px; margin-bottom: 8px; }
+.success-banner .pnr {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-top: 10px;
+}
+/* No results */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+}
+.no-results h3 { color: #666; margin-bottom: 8px; }

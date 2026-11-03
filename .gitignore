@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+IRCTC_Tatkal_Assistant/
+*.spec
+
+# Browser profile and cache data (contains session cookies/history)
+chrome_profile/
+*/chrome_profile/
+
+# Diagnostics and scratch files
+page_dom.html
+psgn_page.html
+insurance_dom.html
+insurance_dom2.html
+train_card_dom.html
+train_card_clicked_dom.html
+page_text.txt
+test_stdout*.txt
+*.log
+
+# Environment / local configs
+.env
+.venv
+env/
+venv/

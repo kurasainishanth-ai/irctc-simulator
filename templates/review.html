@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRCTC Simulator - Review Journey</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>IRCTC Next Generation eTicketing System (Simulator)</h1>
+        <div class="user-info">
+            Welcome, {{ session['username'] }} <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <div class="card-header">REVIEW JOURNEY DETAILS</div>
+            <div class="card-body">
+                <table class="review-table">
+                    <tr><td>Train</td><td>{{ train.train_name }} ({{ train.train_number }})</td></tr>
+                    <tr><td>From</td><td>{{ train.from_station }} — Dep: {{ train.departure }}</td></tr>
+                    <tr><td>To</td><td>{{ train.to_station }} — Arr: {{ train.arrival }}</td></tr>
+                    <tr><td>Duration</td><td>{{ train.duration }}</td></tr>
+                    <tr><td>Class</td><td>{{ train.class }}</td></tr>
+                    <tr><td>Availability</td><td>{{ train.availability }}</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">PASSENGER LIST</div>
+            <div class="card-body">
+                <table class="passenger-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Nationality</th>
+                            <th>Berth Pref</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in passengers %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ p.name }}</td>
+                            <td>{{ p.age }}</td>
+                            <td>{{ p.gender }}</td>
+                            <td>{{ p.get('nationality', 'IN') }}</td>
+                            <td>{{ p.get('berth_pref', '-') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">CONTACT DETAILS</div>
+            <div class="card-body">
+                <table class="review-table">
+                    <tr><td>Mobile</td><td>{{ contact.get('mobile', '-') }}</td></tr>
+                    <tr><td>Email</td><td>{{ contact.get('email', '-') }}</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">FARE SUMMARY</div>
+            <div class="card-body">
+                <table class="review-table">
+                    <tr><td>Base Fare ({{ passengers|length }} × ₹{{ train.fare }})</td><td>₹ {{ base_fare }}</td></tr>
+                    <tr><td>Convenience Fee (incl. GST)</td><td>₹ {{ convenience_fee }}</td></tr>
+                    <tr style="font-weight:bold;font-size:15px;"><td>Total Fare</td><td>₹ {{ total_fare }}</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+            <a href="{{ url_for('passengers') }}" class="btn btn-secondary">← Back</a>
+            <form method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-primary" id="continueToPayBtn">Continue to Payment</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
